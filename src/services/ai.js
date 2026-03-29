@@ -129,11 +129,20 @@ const createChatCompletion = async (payload) => {
 
 export const transcribeAudio = async (audioUri) => {
     const formData = new FormData();
-    formData.append('file', {
-        uri: audioUri,
-        type: 'audio/m4a',
-        name: 'recording.m4a',
-    });
+
+    if (Platform.OS === 'web') {
+        const audioResponse = await fetch(audioUri);
+        const audioBlob = await audioResponse.blob();
+        const extension = audioBlob.type.includes('webm') ? 'webm' : 'm4a';
+        formData.append('file', audioBlob, `recording.${extension}`);
+    } else {
+        formData.append('file', {
+            uri: audioUri,
+            type: 'audio/m4a',
+            name: 'recording.m4a',
+        });
+    }
+
     formData.append('model', 'whisper-1');
     formData.append('language', 'en');
     formData.append('response_format', 'text');
