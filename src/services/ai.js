@@ -10,8 +10,17 @@ const CLIENT_TRANSCRIPTION_API_KEY =
 const API_BASE_URL = (process.env.EXPO_PUBLIC_API_BASE_URL || '').replace(/\/$/, '');
 
 const getServerApiUrl = (path) => {
-    if (!API_BASE_URL) return null;
-    return `${API_BASE_URL}${path}`;
+    if (API_BASE_URL) {
+        return `${API_BASE_URL}${path}`;
+    }
+
+    // On deployed web (for example Vercel), same-origin API routes can be called
+    // without an explicit public base URL.
+    if (Platform.OS === 'web') {
+        return path;
+    }
+
+    return null;
 };
 
 const getRequiredClientApiKey = () => {
@@ -166,7 +175,7 @@ export const transcribeAudio = async (audioUri) => {
         throw error;
     }
 
-    throw new Error('Speech transcription is not configured. Add EXPO_PUBLIC_OPENAI_TRANSCRIPTION_API_KEY for local testing or configure the /api/transcribe backend.');
+    throw new Error('Speech transcription is not configured. Add EXPO_PUBLIC_OPENAI_API_KEY or EXPO_PUBLIC_OPENAI_TRANSCRIPTION_API_KEY for local testing, or configure the /api/transcribe backend.');
 };
 
 const SYSTEM_PROMPT = `You are an AI execution engine inside a voice notes app called VOCALS. Your job is to analyze spoken transcripts and extract ACTIONABLE structure.
