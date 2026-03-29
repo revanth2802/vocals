@@ -1,29 +1,45 @@
 {
   "expo": {
-    "name": "vocals",
+    "name": "VOCALS",
     "slug": "vocals",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
-    "userInterfaceStyle": "light",
+    "userInterfaceStyle": "automatic",
     "splash": {
       "image": "./assets/splash-icon.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#FBF6F1"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": false,
+      "bundleIdentifier": "com.vocals.app",
+      "infoPlist": {
+        "NSMicrophoneUsageDescription": "VOCALS needs microphone access to record your voice notes and convert them into actionable tasks.",
+        "NSSpeechRecognitionUsageDescription": "VOCALS uses speech recognition to transcribe your voice notes."
+      },
+      "backgroundColor": "#FBF6F1"
     },
     "android": {
       "adaptiveIcon": {
-        "backgroundColor": "#E6F4FE",
         "foregroundImage": "./assets/android-icon-foreground.png",
-        "backgroundImage": "./assets/android-icon-background.png",
-        "monochromeImage": "./assets/android-icon-monochrome.png"
-      }
+        "backgroundColor": "#FBF6F1"
+      },
+      "permissions": [
+        "android.permission.RECORD_AUDIO"
+      ],
+      "package": "com.vocals.app"
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "plugins": [
+      [
+        "expo-av",
+        {
+          "microphonePermission": "VOCALS needs microphone access to record your voice notes."
+        }
+      ]
+    ]
   }
 }
